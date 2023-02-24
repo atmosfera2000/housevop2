@@ -1,0 +1,96 @@
+.animate_downUp {
+  animation: downUp 0.9s cubic-bezier(0.1,0.25,0.1,1) 0s infinite alternate both;
+}
+
+.animate_bgcolor {
+  animation: changeColor 2s linear 0s infinite;
+}
+
+.animate__animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    opacity: 0;
+}
+
+.animate__fadeInLeft {    
+    animation-name: fadeInLeft;
+}
+
+.animate__fadeInRight {
+   animation-name: fadeInRight;
+}
+
+.animate__lightSpeedInLeft {
+    animation-name: lightSpeedInLeft;
+    animation-timing-function: ease-out;
+}
+
+@keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translate3d(-100%, 0, 0);
+    }
+  
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+      opacity: 0;
+      -webkit-transform: translate3d(100%, 0, 0);
+      transform: translate3d(100%, 0, 0);
+    }
+  
+    to {
+      opacity: 1;
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes lightSpeedInLeft {
+    from {
+      transform: translate3d(-100%, 0, 0) skewX(30deg);
+      opacity: 0;
+    }
+  
+    60% {
+      transform: skewX(-20deg);
+      opacity: 1;
+    }
+  
+    80% {
+      transform: skewX(5deg);
+      opacity: 1;
+    }
+  
+    to {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+}
+
+@keyframes downUp {
+    from {
+        transform: translateY(-0.625rem);
+    }
+
+    to {
+        transform: translateY(.3125rem);
+    }
+}
+
+@keyframes changeColor {
+  0% {
+      background-color: #fff;  
+  }
+  50% {
+      background-color: #626262;
+  }
+  100% {
+    background-color: #fff;  
+  }
+}

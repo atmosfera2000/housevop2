@@ -1,0 +1,69 @@
+name: NodeJS with Webpack
+
+on:
+  push:
+    branches: [ "main" ]
+    
+jobs:
+  build:    
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        npm install
+        webpack --mode production --env production
+        
+    - name: Archive artifact
+      shell: sh
+      if: runner.os == 'Linux'
+      run: |
+        for f in $(chmod -c -R +r . | awk '{print substr($3, 2, length($3)-2)}')
+        do
+          echo "::warning::Added read permission to $f"
+        done
+        tar \
+          --dereference --hard-dereference \
+          --directory "$INPUT_PATH" \
+          -cvf "$RUNNER_TEMP/artifact.tar" \
+          --exclude=.git \
+          --exclude=.github \
+          .
+      env:
+        INPUT_PATH: "dist/"      
+    
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.1
+      with:    
+        name: "github-pages"
+        path: ${{ runner.temp }}/artifact.tar
+            
+  deploy:
+    needs: build
+    
+    permissions:
+      pages: write      
+      id-token: write   
+      
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+   
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+    
+        
